@@ -1,7 +1,6 @@
 package com.example.backend.Entity;
 
 import jakarta.persistence.*;
-
 import java.util.UUID;
 
 @Entity
@@ -9,12 +8,15 @@ public class ProjectEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
     private String title;
+
     private String details;
+
     @Lob
     private byte[] image;
 
-    public UUID getId (){
+    public UUID getId() {
         return id;
     }
 

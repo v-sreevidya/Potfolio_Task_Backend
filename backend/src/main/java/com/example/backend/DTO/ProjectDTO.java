@@ -6,22 +6,15 @@ public class ProjectDTO {
     private UUID id;
     private String title;
     private String details;
-    private String iamge;
+    private String image;
 
-    private UUID getId (){
+
+    public UUID getId() {
         return id;
     }
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
     }
 
     public String getTitle() {
@@ -32,12 +25,19 @@ public class ProjectDTO {
         this.title = title;
     }
 
-    public String getIamge() {
-        return iamge;
+    public String getDetails() {
+        return details;
     }
 
-    public void setIamge(String iamge) {
-        this.iamge = iamge;
+    public void setDetails(String details) {
+        this.details = details;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }
