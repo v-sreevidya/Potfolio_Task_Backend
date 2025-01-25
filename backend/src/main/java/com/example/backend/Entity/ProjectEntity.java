@@ -1,6 +1,7 @@
 package com.example.backend.Entity;
 
 import jakarta.persistence.*;
+
 import java.util.UUID;
 
 @Entity
@@ -11,7 +12,8 @@ public class ProjectEntity {
 
     private String title;
 
-    private String details;
+    @Lob
+    private byte[] details;
 
     @Lob
     private byte[] image;
@@ -32,11 +34,11 @@ public class ProjectEntity {
         this.image = image;
     }
 
-    public String getDetails() {
+    public byte[] getDetails() {
         return details;
     }
 
-    public void setDetails(String details) {
+    public void setDetails(byte[] details) {
         this.details = details;
     }
 
