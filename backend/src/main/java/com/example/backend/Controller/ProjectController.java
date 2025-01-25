@@ -1,6 +1,7 @@
 package com.example.backend.Controller;
 
 import com.example.backend.DTO.ProjectDTO;
+import com.example.backend.Service.PdfTextExtractorService;
 import com.example.backend.Service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,19 +22,28 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private PdfTextExtractorService pdfTextExtractorService;
+
 
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<ProjectDTO> saveProjectDTO(
             @RequestPart("title") String title,
-            @RequestPart("details") MultipartFile detailsFile, // Updated to accept file
+            @RequestPart("details") MultipartFile detailsFile,
             @RequestPart("image") MultipartFile image) {
         try {
             byte[] imageBytes = image.getBytes();
-            byte[] detailsBytes = detailsFile.getBytes(); // Get file content for details
+            byte[] detailsBytes = detailsFile.getBytes();
+
+
+            String detailsText = null;
+            if (detailsFile.getContentType().equals("application/pdf")) {
+                detailsText = pdfTextExtractorService.extractTextFromPdf(Base64.getEncoder().encodeToString(detailsBytes));
+            }
 
             ProjectDTO projectDTO = new ProjectDTO();
             projectDTO.setTitle(title);
-            projectDTO.setDetails(Base64.getEncoder().encodeToString(detailsBytes)); // Store as Base64 String
+            projectDTO.setDetails(detailsText);
             projectDTO.setImage(Base64.getEncoder().encodeToString(imageBytes));
 
             ProjectDTO savedProject = projectService.saveProject(projectDTO);
@@ -68,7 +78,11 @@ public class ProjectController {
 
             if (detailsFile != null && !detailsFile.isEmpty()) {
                 byte[] detailsBytes = detailsFile.getBytes();
-                projectDTO.setDetails(Base64.getEncoder().encodeToString(detailsBytes)); // Store as Base64
+                String detailsText = null;
+                if (detailsFile.getContentType().equals("application/pdf")) {
+                    detailsText = pdfTextExtractorService.extractTextFromPdf(Base64.getEncoder().encodeToString(detailsBytes));
+                }
+                projectDTO.setDetails(detailsText);
             }
 
 
@@ -76,7 +90,7 @@ public class ProjectController {
                 projectDTO.setTitle(title);
             }
 
-
+            // Handle image update (if provided)
             if (image != null && !image.isEmpty()) {
                 byte[] imageBytes = image.getBytes();
                 projectDTO.setImage(Base64.getEncoder().encodeToString(imageBytes));
@@ -94,16 +108,20 @@ public class ProjectController {
     public ResponseEntity<ProjectDTO> updateProject(
             @PathVariable UUID id,
             @RequestPart("title") String title,
-            @RequestPart("details") MultipartFile detailsFile, // Accept file for details
+            @RequestPart("details") MultipartFile detailsFile,
             @RequestPart(value = "image", required = false) MultipartFile image) {
         try {
-            byte[] detailsBytes = detailsFile.getBytes(); // Get file content for details
+            byte[] detailsBytes = detailsFile.getBytes();
+            String detailsText = null;
+            if (detailsFile.getContentType().equals("application/pdf")) {
+                detailsText = pdfTextExtractorService.extractTextFromPdf(Base64.getEncoder().encodeToString(detailsBytes));
+            }
             byte[] imageBytes = (image != null && !image.isEmpty()) ? image.getBytes() : null;
 
             ProjectDTO projectDTO = new ProjectDTO();
             projectDTO.setId(id);
             projectDTO.setTitle(title);
-            projectDTO.setDetails(Base64.getEncoder().encodeToString(detailsBytes)); // Store as Base64 String
+            projectDTO.setDetails(detailsText);
 
             if (imageBytes != null) {
                 projectDTO.setImage(Base64.getEncoder().encodeToString(imageBytes));

@@ -26,20 +26,20 @@ public class ProjectEntity {
         this.id = id;
     }
 
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
-
     public byte[] getDetails() {
         return details;
     }
 
     public void setDetails(byte[] details) {
         this.details = details;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public String getTitle() {

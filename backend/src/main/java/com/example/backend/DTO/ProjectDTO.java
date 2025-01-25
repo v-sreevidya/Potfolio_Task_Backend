@@ -5,8 +5,8 @@ import java.util.UUID;
 public class ProjectDTO {
     private UUID id;
     private String title;
-    private String details;
-    private String image;    
+    private String details; 
+    private String image;
 
     public UUID getId() {
         return id;
