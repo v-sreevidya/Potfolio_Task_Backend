@@ -12,8 +12,8 @@ public class ProjectEntity {
 
     private String title;
 
-    @Lob
-    private byte[] details;
+@Lob
+    private String details;
 
     @Lob
     private byte[] image;
@@ -26,11 +26,11 @@ public class ProjectEntity {
         this.id = id;
     }
 
-    public byte[] getDetails() {
+    public String getDetails() {
         return details;
     }
 
-    public void setDetails(byte[] details) {
+    public void setDetails(String details) {
         this.details = details;
     }
 
