@@ -26,11 +26,15 @@ public class ProjectService {
         return convertEntityToDTO(projectEntity);
     }
 
+
+
+
     private ProjectDTO convertEntityToDTO(ProjectEntity projectEntity) {
         ProjectDTO projectDTO = new ProjectDTO();
         projectDTO.setId(projectEntity.getId());
         projectDTO.setTitle(projectEntity.getTitle());
         projectDTO.setDetails(projectEntity.getDetails());
+
 
         if (projectEntity.getImage() != null) {
             String base64Image = Base64.getEncoder().encodeToString(projectEntity.getImage()); // Convert image to base64
@@ -39,8 +43,30 @@ public class ProjectService {
 
         return projectDTO;
     }
+    public ProjectDTO updateProjectById(UUID id, ProjectDTO projectDTO) {
+        // Find the existing project
+        ProjectEntity existingProject = projectRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Project not found with ID: " + id));
+        System.out.println("Existing Project before update: " + existingProject);
+        // Update fields
+        if (projectDTO.getTitle() != null) {
+            existingProject.setTitle(projectDTO.getTitle());
+        }
+        if (projectDTO.getDetails() != null) {
+            existingProject.setDetails(projectDTO.getDetails());
+        }
+        if (projectDTO.getImage() != null) {
+            byte[] imageBytes = Base64.getDecoder().decode(projectDTO.getImage());
+            existingProject.setImage(imageBytes);
+        }
+        System.out.println("Existing Project after update: " + existingProject);
+        // Save the updated entity and return the updated DTO
+        ProjectEntity updatedEntity = projectRepo.save(existingProject);
+        return convertEntityToDTO(updatedEntity);
+    }
 
     public ProjectDTO saveProject(ProjectDTO projectDTO) {
+
         ProjectEntity projectEntity = convertDTOToEntity(projectDTO);
         ProjectEntity savedEntity = projectRepo.save(projectEntity);
         return convertEntityToDTO(savedEntity);
@@ -50,6 +76,7 @@ public class ProjectService {
         ProjectEntity projectEntity = new ProjectEntity();
         projectEntity.setTitle(projectDTO.getTitle());
         projectEntity.setDetails(projectDTO.getDetails());
+
 
         if (projectDTO.getImage() != null) {
             byte[] imageBytes = Base64.getDecoder().decode(projectDTO.getImage());

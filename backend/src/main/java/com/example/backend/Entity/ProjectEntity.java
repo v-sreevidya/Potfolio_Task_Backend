@@ -12,8 +12,11 @@ public class ProjectEntity {
 
     private String title;
 
-@Lob
+    @Lob
+    @Column(name = "details", columnDefinition = "TEXT")
     private String details;
+    @Column
+
 
     @Lob
     private byte[] image;
@@ -49,4 +52,6 @@ public class ProjectEntity {
     public void setTitle(String title) {
         this.title = title;
     }
+
+
 }

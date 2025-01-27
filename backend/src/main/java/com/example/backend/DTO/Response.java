@@ -1,13 +1,14 @@
 package com.example.backend.DTO;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class ProjectDTO {
-    private UUID id;
-    private String title;
-    private String details;
+public class Response {
+    public UUID id;
+    public String title;
+    public String details;
+    public String image;
 
-    private String image; 
 
     public UUID getId() {
         return id;
@@ -40,6 +41,5 @@ public class ProjectDTO {
     public void setImage(String image) {
         this.image = image;
     }
-
-
 }
+
