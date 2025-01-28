@@ -7,10 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
+
 public class ProjectService {
     private final ProjectRepo projectRepo;
 
@@ -26,6 +29,18 @@ public class ProjectService {
         return convertEntityToDTO(projectEntity);
     }
 
+    public ProjectDTO mapToDTO(ProjectEntity projectEntity) {
+        ProjectDTO dto = new ProjectDTO();
+        dto.setTitle(projectEntity.getTitle());
+        dto.setDetails(projectEntity.getDetails());
+
+        // Convert byte[] to Base64 String
+        if (projectEntity.getImage() != null) {
+            dto.setImage(Base64.getEncoder().encodeToString(projectEntity.getImage()));
+        }
+
+        return dto;
+    }
 
 
 
@@ -35,14 +50,15 @@ public class ProjectService {
         projectDTO.setTitle(projectEntity.getTitle());
         projectDTO.setDetails(projectEntity.getDetails());
 
-
+        // Convert byte[] to Base64 String before setting in DTO
         if (projectEntity.getImage() != null) {
             String base64Image = Base64.getEncoder().encodeToString(projectEntity.getImage()); // Convert image to base64
-            projectDTO.setImage(base64Image);
+            projectDTO.setImage(base64Image); // Set the Base64 string in DTO
         }
 
         return projectDTO;
     }
+
     public ProjectDTO updateProjectById(UUID id, ProjectDTO projectDTO) {
         // Find the existing project
         ProjectEntity existingProject = projectRepo.findById(id)
@@ -64,6 +80,19 @@ public class ProjectService {
         ProjectEntity updatedEntity = projectRepo.save(existingProject);
         return convertEntityToDTO(updatedEntity);
     }
+    public List<ProjectDTO> getAllProjects() {
+        return projectRepo.findAll().stream()
+                .map(project -> {
+                    ProjectDTO dto = new ProjectDTO();
+                    dto.setId(project.getId());
+                    dto.setTitle(project.getTitle());
+                    dto.setDetails(project.getDetails());
+                    dto.setImage(project.getImage());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
 
     public ProjectDTO saveProject(ProjectDTO projectDTO) {
 
