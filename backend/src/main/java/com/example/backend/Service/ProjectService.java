@@ -6,10 +6,7 @@ import com.example.backend.Repository.ProjectRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -87,7 +84,7 @@ public class ProjectService {
                     dto.setId(project.getId());
                     dto.setTitle(project.getTitle());
                     dto.setDetails(project.getDetails());
-                    dto.setImage(project.getImage());
+                    dto.setImage(Arrays.toString(project.getImage()));
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -114,4 +111,12 @@ public class ProjectService {
 
         return projectEntity;
     }
-}
+
+    public void deleteServiceById(UUID id) {
+        if (!projectRepo.existsById(id)) {
+            throw new RuntimeException("Project not found");
+        }
+        projectRepo.deleteById(id);
+    }
+    }
+

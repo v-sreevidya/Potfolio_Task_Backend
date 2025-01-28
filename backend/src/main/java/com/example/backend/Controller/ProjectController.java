@@ -102,7 +102,17 @@ public class ProjectController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    @DeleteMapping("/del/{id}")
+    public ResponseEntity<String> deleteProjectById(@PathVariable UUID id) {
+        try {
+            projectService.deleteServiceById(id);
+            return ResponseEntity.ok("Project deleted successfully");
 
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Project with ID " + id + " not found.");
+        }
+    }
 
 
 }
