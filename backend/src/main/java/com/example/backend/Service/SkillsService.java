@@ -80,11 +80,16 @@ public class SkillsService {
                     dto.setId(skill.getId());
                     dto.setTitle(skill.getTitle());
 
-                    dto.setImage(Arrays.toString(skill.getImage()));
+                    // ✅ Correctly convert byte[] to Base64 string
+                    if (skill.getImage() != null) {
+                        dto.setImage(Base64.getEncoder().encodeToString(skill.getImage()));
+                    }
+
                     return dto;
                 })
                 .collect(Collectors.toList());
     }
+
 
     public SkillsDTO saveSkills(SkillsDTO skillsDTO) {
         SkillsEntity skillsEntity = convertDTOToEntity(skillsDTO);

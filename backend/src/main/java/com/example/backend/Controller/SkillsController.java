@@ -47,7 +47,9 @@ public class SkillsController {
     public ResponseEntity<List<SkillsDTO>> getAllSkills() {
         try {
             List<SkillsDTO> skills = skillsService.getAllSkills();
+
             return ResponseEntity.ok(skills);
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
