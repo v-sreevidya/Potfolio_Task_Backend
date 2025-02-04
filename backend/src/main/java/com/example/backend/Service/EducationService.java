@@ -34,4 +34,5 @@ public class EducationService {
     public void deleteEducation(UUID id) {
         educationRepo.deleteById(id);
     }
+
 }

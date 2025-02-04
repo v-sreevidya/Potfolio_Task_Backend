@@ -3,6 +3,7 @@ package com.example.backend.Controller;
 import com.example.backend.DTO.AdminDTO;
 import com.example.backend.Service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,9 +29,28 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginAdmin() {
-        return ResponseEntity.ok("Login Successful"); // If authentication passes, Spring Security handles login
+    public ResponseEntity<String> loginAdmin(@RequestBody AdminDTO adminDTO) {
+        // Extract username and password from the request
+        String username = adminDTO.getUsername();
+        String password = adminDTO.getPassword();
+
+        // Use authentication logic to verify username and password
+        boolean authenticated = authenticateAdmin(username, password);
+
+        if (authenticated) {
+            return ResponseEntity.ok("Login Successful");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        }
     }
+
+    private boolean authenticateAdmin(String username, String password) {
+        // For example, check username and password in the database or in memory
+        // In real applications, you'd hash the password and compare it with the stored hash
+        // This is just a simple check for demonstration purposes
+        return "admin".equals(username) && "adminPassword".equals(password);
+    }
+
 
 }
 

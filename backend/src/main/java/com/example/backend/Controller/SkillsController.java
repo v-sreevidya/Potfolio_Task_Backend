@@ -27,10 +27,7 @@ public class SkillsController {
             @RequestPart("image") MultipartFile image) {
 
         try {
-            System.out.println("Title: " + title);
-            System.out.println("Image: " + image.getOriginalFilename());
             byte[] imageBytes = image.getBytes();
-
             SkillsDTO skillsDTO = new SkillsDTO();
             skillsDTO.setTitle(title);
             skillsDTO.setImage(Base64.getEncoder().encodeToString(imageBytes));
@@ -47,9 +44,7 @@ public class SkillsController {
     public ResponseEntity<List<SkillsDTO>> getAllSkills() {
         try {
             List<SkillsDTO> skills = skillsService.getAllSkills();
-
             return ResponseEntity.ok(skills);
-
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -65,22 +60,17 @@ public class SkillsController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/put/{id}")
     public ResponseEntity<SkillsDTO> updateSkillById(
             @PathVariable UUID id,
             @RequestPart("title") String title,
             @RequestPart("image") MultipartFile image) {
 
         try {
-            System.out.println("Updating skill with ID: " + id);
-            System.out.println("Title: " + title);
-
-            // Convert image to base64
             SkillsDTO skillsDTO = new SkillsDTO();
             skillsDTO.setTitle(title);
             skillsDTO.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
 
-            // Call service to update the skill
             SkillsDTO updatedSkillsDTO = skillsService.updateSkillsById(id, skillsDTO);
             return ResponseEntity.ok(updatedSkillsDTO);
         } catch (RuntimeException e) {

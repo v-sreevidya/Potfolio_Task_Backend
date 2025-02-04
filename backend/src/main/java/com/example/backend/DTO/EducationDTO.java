@@ -4,10 +4,10 @@ import java.util.UUID;
 
 public class EducationDTO {
     private UUID id;
-    private String title;
+
     private String year;
     private String institution;
-    private String type;
+    private String degree;
 
     // Getters and Setters
     public UUID getId() {
@@ -18,12 +18,12 @@ public class EducationDTO {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getDegree() {
+        return degree;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setDegree(String degree) {
+        this.degree = degree;
     }
 
     public String getYear() {
@@ -42,11 +42,5 @@ public class EducationDTO {
         this.institution = institution;
     }
 
-    public String getType() {
-        return type;
-    }
 
-    public void setType(String type) {
-        this.type = type;
-    }
 }

@@ -1,15 +1,9 @@
-package com.example.backend.Entity;
+package com.example.backend.DTO;
 
-import jakarta.persistence.*;
 import java.util.UUID;
 
-@Entity
-@Table(name= "admin")
-public class UserEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class UserDTO {
     private UUID id;
-
     private String name;
     private String username;
     private String password;

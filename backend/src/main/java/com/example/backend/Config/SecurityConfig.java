@@ -12,6 +12,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 public class SecurityConfig {
@@ -40,16 +44,31 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for API
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/admin/register","/api/admin/login",
-                                "/api/skills","/api/skills/get","/api/skills/get/{id}","/api/skills/{id}",
+                                "/api/skills","/api/skills/get","/api/skills/get/{id}","/api/skills/put/{id}",
                                 "/api/skills/del/{id}","/api/educations/get","/api/educations/get/{id}",
-                                "/api/educations/create","/api/educations/update/{id}","/api/educations/delete/{id}",
-                                "api/projects","api/projects/get","api/projects/get/{id}","api/projects/{id}",
-                                "api/projects/del/{id}").permitAll()
+                                "/api/educations/create","/api/educations/recent","/api/educations/update/{id}","/api/educations/delete/{id}",
+                                "/api/projects","/api/projects/get","/api/projects/get/{id}","/api/projects/{id}",
+                                "/api/projects/del/{id}", "/api/users","/api/users/get","/api/users/{id}","/api/users/get/{id}",
+                                "/api/users/put/{id}","/api/users/del/{id}","/api/users/recent").permitAll()
 
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults()); // Enable Basic Authentication
+                .httpBasic(Customizer.withDefaults()) // Enable Basic Authentication
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())); // Apply CORS configuration
 
         return http.build();
+    }
+
+    @Bean
+    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Allow requests from React app on localhost:3000
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        config.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
+        config.setAllowCredentials(true); // Allow credentials (cookies, etc.)
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config); // Apply to all endpoints
+        return source;
     }
 }

@@ -13,10 +13,10 @@ public class EducationEntity {
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
         private UUID id;
-        private String title;
+
         private String year;
         private String institution;
-        private String type; // e.g., "Trainee", "B.Tech", etc.
+        private String degree; // e.g., "Trainee", "B.Tech", etc.
 
         // Getters and Setters
         public UUID getId() {
@@ -27,15 +27,15 @@ public class EducationEntity {
             this.id = id;
         }
 
-        public String getTitle() {
-            return title;
-        }
+    public String getDegree() {
+        return degree;
+    }
 
-        public void setTitle(String title) {
-            this.title = title;
-        }
+    public void setDegree(String degree) {
+        this.degree = degree;
+    }
 
-        public String getYear() {
+    public String getYear() {
             return year;
         }
 
@@ -51,13 +51,7 @@ public class EducationEntity {
             this.institution = institution;
         }
 
-        public String getType() {
-            return type;
-        }
 
-        public void setType(String type) {
-            this.type = type;
-        }
     }
 
 
