@@ -16,9 +16,9 @@ public class EducationEntity {
 
         private String year;
         private String institution;
-        private String degree; // e.g., "Trainee", "B.Tech", etc.
+        private String degree;
 
-        // Getters and Setters
+
         public UUID getId() {
             return id;
         }

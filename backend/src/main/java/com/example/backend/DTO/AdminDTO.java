@@ -13,6 +13,13 @@ public class AdminDTO {
     {
 
     }
+
+    public AdminDTO(Admin savedAdmin) {
+        this.id = savedAdmin.getId();
+        this.username = savedAdmin.getUsername();
+        this.password = savedAdmin.getPassword();
+    }
+
     public UUID getId() {
         return id;
     }

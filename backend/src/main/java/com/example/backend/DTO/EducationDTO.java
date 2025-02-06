@@ -9,7 +9,7 @@ public class EducationDTO {
     private String institution;
     private String degree;
 
-    // Getters and Setters
+
     public UUID getId() {
         return id;
     }

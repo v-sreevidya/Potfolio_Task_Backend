@@ -85,13 +85,13 @@ public class ProjectController {
             System.out.println("Title: " + title);
             System.out.println("Details: " + details);
 
-            // Convert image to base64
+
             ProjectDTO projectDTO = new ProjectDTO();
             projectDTO.setTitle(title);
             projectDTO.setDetails(details);
             projectDTO.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
 
-            // Call service to update the project
+
             ProjectDTO updatedProjectDTO = projectService.updateProjectById(id, projectDTO);
             return ResponseEntity.ok(updatedProjectDTO);
         } catch (RuntimeException e) {

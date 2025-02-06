@@ -29,7 +29,7 @@ public class SkillsService {
         SkillsDTO dto = new SkillsDTO();
         dto.setTitle(skillsEntity.getTitle());
 
-        // Convert byte[] to Base64 String
+
         if (skillsEntity.getImage() != null) {
             dto.setImage(Base64.getEncoder().encodeToString(skillsEntity.getImage()));
         }
@@ -42,22 +42,22 @@ public class SkillsService {
         skillsDTO.setId(skillsEntity.getId());
         skillsDTO.setTitle(skillsEntity.getTitle());
 
-        // Convert byte[] to Base64 String before setting in DTO
+
         if (skillsEntity.getImage() != null) {
-            String base64Image = Base64.getEncoder().encodeToString(skillsEntity.getImage()); // Convert image to base64
-            skillsDTO.setImage(base64Image); // Set the Base64 string in DTO
+            String base64Image = Base64.getEncoder().encodeToString(skillsEntity.getImage());
+            skillsDTO.setImage(base64Image);
         }
 
         return skillsDTO;
     }
 
     public SkillsDTO updateSkillsById(UUID id, SkillsDTO skillsDTO) {
-        // Find the existing skill
+
         SkillsEntity existingSkills = skillsRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Skill not found with ID: " + id));
         System.out.println("Existing Skill before update: " + existingSkills);
 
-        // Update fields
+
         if (skillsDTO.getTitle() != null) {
             existingSkills.setTitle(skillsDTO.getTitle());
         }
@@ -68,7 +68,7 @@ public class SkillsService {
         }
 
         System.out.println("Existing Skill after update: " + existingSkills);
-        // Save the updated entity and return the updated DTO
+
         SkillsEntity updatedEntity = skillsRepo.save(existingSkills);
         return convertEntityToDTO(updatedEntity);
     }
@@ -80,7 +80,7 @@ public class SkillsService {
                     dto.setId(skill.getId());
                     dto.setTitle(skill.getTitle());
 
-                    // ✅ Correctly convert byte[] to Base64 string
+
                     if (skill.getImage() != null) {
                         dto.setImage(Base64.getEncoder().encodeToString(skill.getImage()));
                     }
@@ -92,6 +92,11 @@ public class SkillsService {
 
 
     public SkillsDTO saveSkills(SkillsDTO skillsDTO) {
+        Optional<SkillsEntity> existingSkill = skillsRepo.findByTitleIgnoreCase(skillsDTO.getTitle());
+
+        if (existingSkill.isPresent()) {
+            throw new RuntimeException("A skill with this title already exists.");
+        }
         SkillsEntity skillsEntity = convertDTOToEntity(skillsDTO);
         SkillsEntity savedEntity = skillsRepo.save(skillsEntity);
         return convertEntityToDTO(savedEntity);

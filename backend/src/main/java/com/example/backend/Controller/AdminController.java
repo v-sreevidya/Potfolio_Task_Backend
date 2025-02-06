@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.UUID;
+
 @RestController
 @RequestMapping("api/admin")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -19,12 +22,13 @@ public class AdminController {
     public ResponseEntity<String> registerAdmin(@RequestBody AdminDTO adminDTO) {
         String result = adminService.registerAdmin(adminDTO);
 
+
         if (result.equals("User already exists")) {
-            return ResponseEntity.status(400).body(result); // Bad Request if user already exists
+            return ResponseEntity.status(400).body(result);
         } else if (result.equals("User registered successfully")) {
-            return ResponseEntity.status(201).body(result); // Created
+            return ResponseEntity.status(201).body(result);
         } else {
-            return ResponseEntity.status(500).body("Something went wrong"); // Internal Server Error
+            return ResponseEntity.status(500).body("Something went wrong");
         }
     }
 
@@ -34,25 +38,45 @@ public class AdminController {
         String username = adminDTO.getUsername();
         String password = adminDTO.getPassword();
 
-        // Use authentication logic to verify username and password
-        boolean authenticated = authenticateAdmin(username, password);
+        String result = adminService.loginAdmin(username, password);
 
-        if (authenticated) {
-            return ResponseEntity.ok("Login Successful");
+        if (result.equals("Login successful")) {
+            return ResponseEntity.status(200).body(result);
+        } else if (result.equals("Invalid credentials")) {
+            return ResponseEntity.status(401).body(result);
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(500).body("Something went wrong");
         }
     }
-
-    private boolean authenticateAdmin(String username, String password) {
-        // For example, check username and password in the database or in memory
-        // In real applications, you'd hash the password and compare it with the stored hash
-        // This is just a simple check for demonstration purposes
-        return "admin".equals(username) && "adminPassword".equals(password);
+    @GetMapping("/all")
+    public ResponseEntity<List<AdminDTO>> getAllAdmins() {
+        List<AdminDTO> admins = adminService.getAllAdmins();
+        return ResponseEntity.ok(admins);
     }
 
 
+    @GetMapping("/{id}")
+    public ResponseEntity<AdminDTO> getAdminById(@PathVariable UUID id) {
+        AdminDTO adminDTO = adminService.getAdminById(id);
+        return ResponseEntity.ok(adminDTO);
+    }
+
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<AdminDTO> updateAdmin(@PathVariable UUID id, @RequestBody AdminDTO adminDTO) {
+        AdminDTO updatedAdmin = adminService.updateAdmin(id, adminDTO);
+        return ResponseEntity.ok(updatedAdmin);
+    }
+
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteAdmin(@PathVariable UUID id) {
+        adminService.deleteAdmin(id);
+        return ResponseEntity.ok("Admin deleted successfully");
+    }
+
 }
+
 
 
 

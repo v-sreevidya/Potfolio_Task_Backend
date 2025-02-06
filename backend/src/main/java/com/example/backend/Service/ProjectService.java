@@ -47,21 +47,21 @@ public class ProjectService {
         projectDTO.setTitle(projectEntity.getTitle());
         projectDTO.setDetails(projectEntity.getDetails());
 
-        // Convert byte[] to Base64 String before setting in DTO
+
         if (projectEntity.getImage() != null) {
-            String base64Image = Base64.getEncoder().encodeToString(projectEntity.getImage()); // Convert image to base64
-            projectDTO.setImage(base64Image); // Set the Base64 string in DTO
+            String base64Image = Base64.getEncoder().encodeToString(projectEntity.getImage());
+            projectDTO.setImage(base64Image);
         }
 
         return projectDTO;
     }
 
     public ProjectDTO updateProjectById(UUID id, ProjectDTO projectDTO) {
-        // Find the existing project
+
         ProjectEntity existingProject = projectRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Project not found with ID: " + id));
         System.out.println("Existing Project before update: " + existingProject);
-        // Update fields
+
         if (projectDTO.getTitle() != null) {
             existingProject.setTitle(projectDTO.getTitle());
         }
@@ -73,7 +73,7 @@ public class ProjectService {
             existingProject.setImage(imageBytes);
         }
         System.out.println("Existing Project after update: " + existingProject);
-        // Save the updated entity and return the updated DTO
+
         ProjectEntity updatedEntity = projectRepo.save(existingProject);
         return convertEntityToDTO(updatedEntity);
     }
